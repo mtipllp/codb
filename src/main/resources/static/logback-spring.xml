@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATH" value="/apps/mtip/microservices/logs/APIService" />
+   <!-- Allows log levels to be configured at runtime via JMX (jolokia) -->
+    <jmxConfigurator />
+
+    <!--
+      - Mitigates performance penalty of java.util.logging used by CXF logging interceptors.
+      - See http://www.slf4j.org/legacy.html#jul-to-slf4j
+      -->
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <!-- reset all previous level configurations of all j.u.l. loggers -->
+        <resetJUL>true</resetJUL>
+    </contextListener>
+     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{ISO8601} %p [T=%t] [Service=%X{Service}] [MethodId=%X{MethodId}] [SystemID=%X{SystemID}] [CID=%X{CID}] [SessionId=%X{SessionId}] [%c{0}] %m%n</pattern>
+		</encoder>
+	</appender>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	    <File>${LOG_PATH}/AccountService.log</File>
+	    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+	        <!-- daily rollover -->
+	        <fileNamePattern>${LOG_PATH}/AccountService.%d{yyyyMMdd}.%i.log</fileNamePattern>
+	        <maxHistory>7</maxHistory>
+	        <maxFileSize>100MB</maxFileSize>
+	    </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{ISO8601} %p [T=%t] [Service=%X{Service}] [MethodId=%X{MethodId}] [SystemID=%X{SystemID}] [CID=%X{CID}]  [SessionId=%X{SessionId}] [%c{0}] %m%n</pattern>
+        </encoder>	
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
