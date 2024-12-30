@@ -4,6 +4,10 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.Date;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 
 /**
  * The persistent class for the sessiondata database table.
@@ -78,6 +82,20 @@ public class Sessiondata implements Serializable {
 
 	public void setStartLevel(String startLevel) {
 		this.startLevel = startLevel;
+	}
+
+	@Override
+	public String toString() {
+		ObjectMapper mapper = new ObjectMapper();
+
+		String jsonString = "";
+		try {
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			jsonString = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return jsonString;
 	}
 
 }
