@@ -1,6 +1,11 @@
 package com.mtipservice.APIService.model;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import jakarta.persistence.*;
 
 
@@ -26,6 +31,20 @@ public class IngredientsSupplier implements Serializable {
 
 	public void setId(IngredientsSupplierPK id) {
 		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		ObjectMapper mapper = new ObjectMapper();
+
+		String jsonString = "";
+		try {
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			jsonString = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return jsonString;
 	}
 
 }
